@@ -7,14 +7,14 @@ import org.lwjgl.opengl.Display.setTitle
 import com.badlogic.gdx.Input.Keys
 
 import java.util.{Timer, TimerTask}
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
-
 
 case class WordPosition(word: String, var x: Float, var y: Float)
 
 class Games extends PortableApplication {
 
-  val words = Words.getWords
+  val words: ArrayBuffer[String] = Words.getWords
   var wordIndex = 0
   val fallingWords = scala.collection.mutable.ArrayBuffer[WordPosition]()
   val timer = new Timer()
@@ -33,7 +33,7 @@ class Games extends PortableApplication {
     println("Game initialized")
     setTitle("Random Words Display")
 
-    img = new BitmapImage("data/images/Android_PI_48x48.png")
+    img = new BitmapImage("data/rocket.png")
 
     timer.scheduleAtFixedRate(new TimerTask {
       override def run(): Unit = {
@@ -81,5 +81,6 @@ class Games extends PortableApplication {
   // Bu metot ekranda yeniden çizimi zorlamak için kullanılabilir.
   def forceRedraw(): Unit = {
     // Ekranda bir yeniden çizim işlemi başlatır.
+    Gdx.graphics.requestRendering()
   }
 }
