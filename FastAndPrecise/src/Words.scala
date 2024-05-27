@@ -1,32 +1,51 @@
-import java.io.{BufferedReader, FileNotFoundException, FileReader}
-import scala.collection.mutable.ArrayBuffer
+import scala.io.Source
+import scala.util.control.NonFatal
 
-object Words {
+case class Words() {
+  private def noAccent(word: String): String = {
 
-  val fileName: String = "data/french_common.csv"
-  val wordsBuffer: ArrayBuffer[String] = ArrayBuffer[String]()
+    val res = new Array[Char](word.length)
 
-  try {
-    val fr = new FileReader(fileName)
-    val inputReader = new BufferedReader(fr)
-
-    var line = inputReader.readLine()
-    while (line != null) {
-      val words = line.split(";")
-      words.foreach(word => wordsBuffer += word.strip())
-      line = inputReader.readLine()
+    for (i <- word.indices) {
+      word(i) match {
+        case 'é' | 'è' | 'ë' | 'ê' | 'ę' => res(i) = 'e'
+        case 'à' | 'â' | 'ä' | 'ą' => res(i) = 'a'
+        case 'ù' | 'ü' | 'ú' | 'û' => res(i) = 'u'
+        case 'ï' | 'î' => res(i) = 'i'
+        case 'ô' => res(i) = 'o'
+        case 'ç' => res(i) = 'c'
+        case other => res(i) = other
+      }
     }
-
-    inputReader.close()
-  } catch {
-    case e: FileNotFoundException =>
-      println("File not found!")
-      e.printStackTrace()
-    case e: Exception =>
-      println(s"Something bad happened during read ${e.getMessage}")
+    new String(res)
   }
 
-  def getWords: ArrayBuffer[String] = {
-    wordsBuffer
+  def getFromFile(): Array[String] = {
+
+    val fileName = "data/french_common.csv"
+
+    try {
+      val source = Source.fromFile(fileName)
+      val lines = source.getLines().toArray
+      val processedWords = new Array[String](lines.length)
+
+      for (i <- lines.indices) {
+        val word = lines(i).split(";")(0)
+        processedWords(i) = noAccent(word)
+      }
+      source.close()
+      processedWords
+    }
+    catch {
+      case e =>
+        println(s"An error occurred: ${e.getMessage}")
+        Array.empty[String]
+    }
+  }
+
+  def getWords: Array[String] = {
+    getFromFile()
+
   }
 }
+
