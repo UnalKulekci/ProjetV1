@@ -1,9 +1,9 @@
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.control.NonFatal
 
-case class Words() {
+class Words() {
   private def noAccent(word: String): String = {
-
     val res = new Array[Char](word.length)
 
     for (i <- word.indices) {
@@ -20,7 +20,7 @@ case class Words() {
     new String(res)
   }
 
-  def getFromFile(): Array[String] = {
+  def getFromFile(): ArrayBuffer[String] = {
 
     val fileName = "data/french_common.csv"
 
@@ -34,18 +34,19 @@ case class Words() {
         processedWords(i) = noAccent(word)
       }
       source.close()
-      processedWords
+      return processedWords.to(ArrayBuffer)
     }
     catch {
       case e =>
         println(s"An error occurred: ${e.getMessage}")
-        Array.empty[String]
+        ArrayBuffer.empty[String]
     }
   }
 
-  def getWords: Array[String] = {
+  def getWords(): ArrayBuffer[String] = {
     getFromFile()
 
   }
+
 }
 
