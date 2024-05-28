@@ -4,6 +4,8 @@ import scala.util.Random
 import scala.util.control.NonFatal
 
 object Words {
+
+  // This function is used to replace the letters with accent by their no-accent version
   private def noAccent(word: String): String = {
     val res = new Array[Char](word.length)
 
@@ -21,6 +23,7 @@ object Words {
     new String(res)
   }
 
+  // This function is used to read a .csv file and put all the different words into an ArrayBuffer[String]
   private def getFromFile(fileName: String): ArrayBuffer[String] = {
 
     try {
@@ -42,7 +45,8 @@ object Words {
     }
   }
 
-  def calculateRounds(totalWords: Int): Int = {
+  // This function calculates the maximum number of rounds to play
+  private def calculateRounds(totalWords: Int): Int = {
     require(totalWords >= 4)
     var number_of_rounds: Int = 1
     var sum: Int = 4
@@ -52,10 +56,10 @@ object Words {
         number_of_rounds += 1
       }
     }
-    println(number_of_rounds)
     number_of_rounds
   }
 
+  // This function creates Arrays with bigger number of words for every round
   def createRoundArray(src: Array[String]): Array[Array[String]] = {
     var allWords: ArrayBuffer[String] = ArrayBuffer.empty[String]
     // copy the src Array into an ArrayBuffer
@@ -81,12 +85,5 @@ object Words {
 
   def getWords(): ArrayBuffer[String] = {
     getFromFile("data/french_common.csv")
-  }
-}
-
-object test23 extends App {
-  val to_test: Array[Array[String]] = Words.createRoundArray(Words.getWords().toArray)
-  for (i <- to_test.indices) {
-    println(s"Round ${i + 1} : ${to_test(i).mkString(",")}")
   }
 }
