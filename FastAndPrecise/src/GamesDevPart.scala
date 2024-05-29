@@ -1,9 +1,8 @@
 import ch.hevs.gdx2d.desktop.PortableApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.graphics.Color
-
 import scala.collection.mutable.ArrayBuffer
-import scala.util.control.Breaks.break
+
 
 class GamesDevPart extends PortableApplication() {
 
@@ -27,8 +26,9 @@ class GamesDevPart extends PortableApplication() {
     }
   }
 
-  var arrSorted: ArrayBuffer[String] = ArrayBuffer[String]("unal", "filip", "sion", "aba").sortWith(_ < _)
-  // Mevcut kelimenin indeksini ve kelimeyi takip etmek için değişkenler
+  val w : ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
+  var arrSorted: ArrayBuffer[String] = w(0).sortWith(_ < _)
+
   var currentWordIndex = -1
   override def onKeyDown(keycode: Int): Unit = {
     val chr = (keycode + 68).toChar
@@ -36,7 +36,7 @@ class GamesDevPart extends PortableApplication() {
     if (currentWordIndex == -1) {
       for (idx <- arrSorted.indices) {
         if (arrSorted(idx).startsWith(chr.toString)) {
-          currentWordIndex = idx
+           currentWordIndex = idx
         }
       }
     }
