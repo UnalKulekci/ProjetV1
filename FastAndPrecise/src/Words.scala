@@ -5,6 +5,8 @@ import scala.util.control.NonFatal
 
 object Words {
 
+  val START_WORDS: Int = 4
+
   // This function is used to replace the letters with accent by their no-accent version
   private def noAccent(word: String): String = {
     val res = new Array[Char](word.length)
@@ -47,10 +49,10 @@ object Words {
 
   // This function calculates the maximum number of rounds to play
   private def calculateRounds(totalWords: Int): Int = {
-    require(totalWords >= 4)
+    require(totalWords >= START_WORDS)
     var number_of_rounds: Int = 1
-    var sum: Int = 4
-    for (i <- 5 until totalWords) {
+    var sum: Int = START_WORDS
+    for (i <- START_WORDS + 1 until totalWords) {
       sum += i
       if (sum <= totalWords) {
         number_of_rounds += 1
@@ -60,27 +62,27 @@ object Words {
   }
 
   // This function creates Arrays with bigger number of words for every round
-  def createRoundArray(src: Array[String]): Array[Array[String]] = {
+  def createRoundArray(src: Array[String]): ArrayBuffer[ArrayBuffer[String]] = {
     var allWords: ArrayBuffer[String] = ArrayBuffer.empty[String]
     // copy the src Array into an ArrayBuffer
     for (i <- src.indices) {
       allWords.append(src(i))
     }
-    var final_res: ArrayBuffer[Array[String]] = ArrayBuffer.empty[Array[String]]
+    var final_res: ArrayBuffer[ArrayBuffer[String]] = ArrayBuffer.empty[ArrayBuffer[String]]
     var res: ArrayBuffer[String] = ArrayBuffer.empty[String]
 
     // 1st round -> 4 words, 30th round -> 33 words
-    for (num_words <- 4 until calculateRounds(src.length) + 4) {
+    for (num_words <- START_WORDS until calculateRounds(src.length) + START_WORDS) {
       // Choosing num_words random words from src to insert them
       for (i <- 0 until num_words) {
         val rdmIdx: Int = Random.between(0, allWords.length)
         res.append(s"${allWords(rdmIdx)}")
         allWords.remove(rdmIdx)
       }
-      final_res.append(res.toArray)
+      final_res.append(res)
       res = ArrayBuffer.empty
     }
-    final_res.toArray
+    final_res
   }
 
   def getWords(): ArrayBuffer[String] = {
