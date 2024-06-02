@@ -27,18 +27,17 @@ object Words {
 
   // This function is used to read a .csv file and put all the different words into an ArrayBuffer[String]
   private def getFromFile(fileName: String): ArrayBuffer[String] = {
-
     try {
       val source = Source.fromFile(fileName)
       val lines = source.getLines().toArray
-      val processedWords = new Array[String](lines.length)
+      val processedWords: ArrayBuffer[String] = ArrayBuffer.empty[String]
 
       for (i <- lines.indices) {
         val word = lines(i).split(";")(0)
-        processedWords(i) = noAccent(word)
+        processedWords.append(noAccent(word))
       }
       source.close()
-      return processedWords.to(ArrayBuffer).distinct
+      return processedWords.distinct
     }
     catch {
       case e =>
@@ -88,4 +87,5 @@ object Words {
   def getWords(): ArrayBuffer[String] = {
     getFromFile("data/french_common.csv")
   }
+
 }
