@@ -6,7 +6,13 @@ import scala.collection.mutable.ArrayBuffer
 
 class GamesDevPart extends PortableApplication() {
 
-  var roundCounter : Int = 0
+
+  val w: ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
+  var arrSorted: ArrayBuffer[String] = ArrayBuffer.empty[String]
+  val arrSortedLength: ArrayBuffer[Int] = ArrayBuffer.empty[Int]
+  var currentWordIndex = -1
+  var roundCounter: Int = 0
+
   override def onInit(): Unit = {
     println("Game initialized")
     setTitle("Games Test")
@@ -16,37 +22,37 @@ class GamesDevPart extends PortableApplication() {
     g.clear()
     g.setBackgroundColor(Color.WHITE)
     g.setColor(Color.BLACK)
-    //Gdx.input.isKeyPressed()
     var posx: Float = 100f
     var posy: Float = 100f
 
     if (roundCounter < w.length) {
-      println(s"Round = ${roundCounter}")
       arrSorted = w(roundCounter)
-      println(arrSorted.mkString("-"))
+      if (arrSortedLength.length < arrSorted.length) {
+        for (i <- arrSorted.indices) {
+          arrSortedLength.append(arrSorted(i).length)
+        }
+      }
     }
 
-    for (i <- arrSorted.indices) {
+    for (i <- (arrSorted.length - 1) to 0 by -1) {
+      if (arrSortedLength(i) != arrSorted(i).length) {
+        g.setColor(Color.ORANGE)
+      } else {
+        g.setColor(Color.BLACK)
+      }
       g.drawString(posx, posy, arrSorted(i))
+      g.setColor(Color.BLACK)
       posx += 15
       posy += 15
     }
-
   }
 
-
-  val w: ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
-  var arrSorted: ArrayBuffer[String] = ArrayBuffer.empty[String]
-
-
-  var currentWordIndex = -1
   override def onKeyDown(keycode: Int): Unit = {
     val chr = (keycode + 68).toChar
-
     if (currentWordIndex == -1) {
       for (idx <- arrSorted.indices) {
         if (arrSorted(idx).startsWith(chr.toString)) {
-           currentWordIndex = idx
+          currentWordIndex = idx
         }
       }
     }
@@ -56,11 +62,11 @@ class GamesDevPart extends PortableApplication() {
       arrSorted(currentWordIndex) = arrSorted(currentWordIndex).substring(1)
       if (arrSorted(currentWordIndex).isEmpty) {
         arrSorted.remove(currentWordIndex)
+        arrSortedLength.remove(currentWordIndex)
         currentWordIndex = -1
-        if(arrSorted.isEmpty){
-          println("safsaf")
+        if (arrSorted.isEmpty) {
           roundCounter += 1
-          println("Round is over you can pass the other...asfa")
+          println("Round is over you can pass the other...")
         }
 
       }
@@ -72,4 +78,5 @@ class GamesDevPart extends PortableApplication() {
 object gtest extends App {
   val game: GamesDevPart = new GamesDevPart()
 }
+
 
