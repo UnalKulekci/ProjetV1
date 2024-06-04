@@ -1,4 +1,4 @@
-![Alt text](image/logo.png)
+![fast_and_precise](image/logo.png)
 
 Fast and Precise is a game coded in Scala based on the `ZType` game which tests our ability to write on a keyboard.
 
@@ -25,3 +25,5 @@ To play the Fast and Precise GAME,
 5. The score is based on the speed you write the words and the number of achieved rounds.
 
 5. Enjoy and make the best score possible!
+
+![isc](image/logo_isc.png)
