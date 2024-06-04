@@ -2,12 +2,17 @@ import ch.hevs.gdx2d.desktop.PortableApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
 
-import java.awt.Font
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+
+
+/*  TODO ::
+     AT GAME OVER, THE GAME STOPS AND RESTARTS IF THE USER CLICKS YES -- restart will added
+     YOU NEED TO INCREASE THE FONT OF THE WORDS ON THE SCREEN -- ??
+     INCREASE THE RATE AT WHICH THE WORDS FALL WITH EACH ROUND -- THAT'S IT, IF PHILIP SAYS OKAY.
+ */
 
 class Mixed extends PortableApplication(1920, 1080) {
 
@@ -18,17 +23,7 @@ class Mixed extends PortableApplication(1920, 1080) {
   var roundCounter: Int = 0
   var fallingWords = new ArrayBuffer[WordPosition]()
 
-
-  /*
-  // Load font and set size
-  val generator = new FreeTypeFontGenerator(Gdx.files.internal("data/arial.ttf"))
-  val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter()
-  parameter.size = 36
-  val font: BitmapFont = generator.generateFont(parameter)
-  generator.dispose()
-
-   */
-
+  var isGameOver = false // Game over state
 
 
   override def onInit(): Unit = {
@@ -43,14 +38,15 @@ class Mixed extends PortableApplication(1920, 1080) {
   }
 
   var scoresCounter : Float = 0f
-  var roundPenderation : Float = 0.5f
+  var fallingVitesse : Float = 0.5f // to increase falling vitesse each round
 
   override def onGraphicRender(g: GdxGraphics): Unit = {
     g.clear()
     g.setBackgroundColor(Color.WHITE)
 
+    // Set the scores
+    g.drawString(100f,100f,s" Total Scores : ${scoresCounter}")
 
-    g.drawString(100,100,s"Total Scores = $scoresCounter")
 
     if (roundCounter < w.length) {
       arrSorted = w(roundCounter)
@@ -69,9 +65,7 @@ class Mixed extends PortableApplication(1920, 1080) {
 
     // Update and draw falling words
     for (i: Int <- 0 until fallingWords.length) {
-      fallingWords(i).y -= 1
-
-
+      fallingWords(i).y -= fallingVitesse
 
       if (arrSortedLength(i) != fallingWords(i).word.length) {
         g.setColor(new Color(212, 0, 103, 255))
@@ -84,6 +78,7 @@ class Mixed extends PortableApplication(1920, 1080) {
 
       if(fallingWords(i).y < 0) {
         g.drawString(g.getScreenWidth/2,g.getScreenHeight/2,"G  A  M  E  O  V  E  R")
+        isGameOver = true
       }
     }
 
@@ -91,6 +86,8 @@ class Mixed extends PortableApplication(1920, 1080) {
   }
 
   override def onKeyDown(keycode: Int): Unit = {
+    if (isGameOver) return
+
     val chr = (keycode + 68).toChar
     if (currentWordIndex == -1) {
       for (idx <- arrSorted.indices) {
@@ -111,6 +108,7 @@ class Mixed extends PortableApplication(1920, 1080) {
         currentWordIndex = -1
         if (fallingWords.isEmpty) {
           roundCounter += 1
+          fallingVitesse += 0.3f
           //roundPenderation += 1 // --
           println("Round is over you can pass the other...")
         }
@@ -119,6 +117,11 @@ class Mixed extends PortableApplication(1920, 1080) {
   }
 }
 
+
 object test extends App {
   val g1: Mixed = new Mixed()
+
+
+
 }
+
