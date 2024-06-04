@@ -4,9 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import scala.collection.mutable.ArrayBuffer
 
 
-class GamesDevPart extends PortableApplication() {
-
-
+class GamesDevPart extends PortableApplication(1920,1080) {
   val w: ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
   var arrSorted: ArrayBuffer[String] = ArrayBuffer.empty[String]
   val arrSortedLength: ArrayBuffer[Int] = ArrayBuffer.empty[Int]
@@ -36,7 +34,7 @@ class GamesDevPart extends PortableApplication() {
 
     for (i <- (arrSorted.length - 1) to 0 by -1) {
       if (arrSortedLength(i) != arrSorted(i).length) {
-        g.setColor(Color.ORANGE)
+        g.setColor(new Color(212, 0, 103, 255))
       } else {
         g.setColor(Color.BLACK)
       }
@@ -45,6 +43,8 @@ class GamesDevPart extends PortableApplication() {
       posx += 15
       posy += 15
     }
+
+    g.drawSchoolLogo()
   }
 
   override def onKeyDown(keycode: Int): Unit = {
@@ -68,11 +68,10 @@ class GamesDevPart extends PortableApplication() {
           roundCounter += 1
           println("Round is over you can pass the other...")
         }
-
       }
     }
-  }
 
+  }
 } // End of the class
 
 object gtest extends App {
