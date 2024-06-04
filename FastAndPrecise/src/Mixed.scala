@@ -31,7 +31,7 @@ class Mixed extends PortableApplication(1920, 1080) {
 
     if (roundCounter < w.length) {
       arrSorted = w(roundCounter)
-      if(fallingWords.length < arrSorted.length){
+      if (fallingWords.length < arrSorted.length) {
         for (i <- 0 until arrSorted.length) {
           val (x, y) = getRandomPosition(getWindowWidth.toFloat, getWindowHeight.toFloat)
           fallingWords.append(WordPosition(arrSorted(i), x, y))
@@ -45,7 +45,7 @@ class Mixed extends PortableApplication(1920, 1080) {
     }
 
     // Update and draw falling words
-    for (i:Int <- 0 until fallingWords.length) {
+    for (i: Int <- 0 until fallingWords.length) {
       fallingWords(i).y -= 1
 
       if (arrSortedLength(i) != fallingWords(i).word.length) {
@@ -72,7 +72,7 @@ class Mixed extends PortableApplication(1920, 1080) {
     }
 
     if (currentWordIndex != -1 && fallingWords(currentWordIndex).word.startsWith(chr.toString)) {
-//      arrSorted(currentWordIndex) = arrSorted(currentWordIndex).substring(1)
+      //      arrSorted(currentWordIndex) = arrSorted(currentWordIndex).substring(1)
       fallingWords(currentWordIndex).word = fallingWords(currentWordIndex).word.substring(1)
       if (fallingWords(currentWordIndex).word.isEmpty) {
         arrSorted.remove(currentWordIndex)

@@ -3,8 +3,7 @@ import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.graphics.Color
 import scala.collection.mutable.ArrayBuffer
 
-
-class GamesDevPart extends PortableApplication(1920,1080) {
+class GamesDevPart extends PortableApplication(1920, 1080) {
   val w: ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
   var arrSorted: ArrayBuffer[String] = ArrayBuffer.empty[String]
   val arrSortedLength: ArrayBuffer[Int] = ArrayBuffer.empty[Int]
@@ -56,7 +55,6 @@ class GamesDevPart extends PortableApplication(1920,1080) {
         }
       }
     }
-
 
     if (currentWordIndex != -1 && arrSorted(currentWordIndex).startsWith(chr.toString)) {
       arrSorted(currentWordIndex) = arrSorted(currentWordIndex).substring(1)
