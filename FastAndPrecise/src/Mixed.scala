@@ -3,7 +3,6 @@ import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
-
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
@@ -36,7 +35,6 @@ class Mixed extends PortableApplication(1920, 1080) {
         x.append(a(i))
       }
     }
-    println(x.mkString(","))
     x = x.sortBy(_.word)
     if (x.length == 1) {
       return a.indexOf(x(0))
@@ -54,18 +52,20 @@ class Mixed extends PortableApplication(1920, 1080) {
     -1
   }
 
+  // Function used to display words in a random way
   private def getRandomPosition(maxWidth: Float, maxHeight: Float): (Float, Float) = {
     val x = 100 + Random.nextFloat() * (maxWidth - 200)
     val y = maxHeight
     (x, y)
   }
 
+  // Function called only ones
   override def onInit(): Unit = {
-    println(Console.MAGENTA + "FAST & PRECISE" + Console.RESET + " 2024 " + Console.RESET + "by " + Console.BLUE + "KÜLEKÇI ÜNAL" + Console.RESET + "and" + Console.YELLOW + " SILIWONIUK FILIP" + Console.RESET)
+    println(Console.MAGENTA + "FAST & PRECISE" + Console.RESET + " 2024 " + Console.RESET + "by " + Console.BLUE + "ÜNAL" + Console.RESET + "and" + Console.YELLOW + " FILIP" + Console.RESET)
     setTitle("FAST & PRECISE")
   }
 
-
+  // Graphic function, counter
   override def onGraphicRender(g: GdxGraphics): Unit = {
     g.clear()
     if (!isGameOver) {
@@ -74,21 +74,26 @@ class Mixed extends PortableApplication(1920, 1080) {
         secondTimer += 1
       }
     }
+    g.setColor(Color.VIOLET)
     g.drawString(100f, 150f, s"Round : ${roundCounter + 1}          Time : ${secondTimer}")
+    g.setColor(Color.BLACK)
     g.setBackgroundColor(Color.WHITE)
 
     // Set the scores
     g.drawString(100f, 100f, s" Total Scores : ${scoresCounter}")
 
 
+    // Filling the array with words for the actual round
     if (roundCounter < w.length) {
       arrSorted = w(roundCounter)
+      // Filling fallingWords array used to make the words fall on the window
       if (fallingWords.length < arrSorted.length) {
         for (i <- 0 until arrSorted.length) {
           val (x, y) = getRandomPosition(getWindowWidth.toFloat, getWindowHeight.toFloat + Random.between(0, 120))
           fallingWords.append(WordPosition(arrSorted(i), x, y))
         }
       }
+      // ArrSortedLength used to change the color of a word which is being typed
       if (arrSortedLength.length < arrSorted.length) {
         for (i <- arrSorted.indices) {
           arrSortedLength.append(arrSorted(i).length)
@@ -120,13 +125,16 @@ class Mixed extends PortableApplication(1920, 1080) {
     g.drawSchoolLogo()
   }
 
+  // This function deletes the letters from the word
   override def onKeyDown(keycode: Int): Unit = {
     if (isGameOver) {
       return
     }
 
+    // Getting the Char after pressing a key on the keyboard
     val chr = (keycode + 68).toChar
     if (currentWordIndex == -1) {
+      // Getting the word index to work on
       currentWordIndex = returnCurrentIdx(fallingWords, chr)
     }
 
@@ -140,7 +148,6 @@ class Mixed extends PortableApplication(1920, 1080) {
         currentWordIndex = -1
         if (fallingWords.isEmpty) {
           roundCounter += 1
-          println("Round is over you can pass the other...")
         }
       }
     }
