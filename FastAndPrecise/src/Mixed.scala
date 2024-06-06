@@ -1,8 +1,9 @@
 import ch.hevs.gdx2d.desktop.PortableApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
+
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
@@ -24,6 +25,8 @@ class Mixed extends PortableApplication(1920, 1080) {
   private var scoresCounter: Float = 0f
   private var idxTimer: Int = 0
   private var secondTimer: Int = 0
+  private var font: BitmapFont = _
+  private var batch: SpriteBatch = _
 
   // Word select after pressing a key depending on the y position as well as the order of letters
   private def returnCurrentIdx(a: ArrayBuffer[WordPosition], c: Char): Int = {
@@ -61,27 +64,30 @@ class Mixed extends PortableApplication(1920, 1080) {
 
   // Function called only ones
   override def onInit(): Unit = {
-    println(Console.MAGENTA + "FAST & PRECISE" + Console.RESET + " 2024 " + Console.RESET + "by " + Console.BLUE + "ÜNAL" + Console.RESET + "and" + Console.YELLOW + " FILIP" + Console.RESET)
+    println(Console.MAGENTA + "FAST & PRECISE" + Console.RESET + " 2024 " + Console.RESET + "by " + Console.BLUE + "ÜNAL" + Console.RESET + " and" + Console.YELLOW + " FILIP" + Console.RESET)
     setTitle("FAST & PRECISE")
+    font = new BitmapFont()
+    font.getData.setScale(1.1f) // Increase font size
+    batch = new SpriteBatch()
   }
 
   // Graphic function, counter
   override def onGraphicRender(g: GdxGraphics): Unit = {
     g.clear()
+    batch.begin()
     if (!isGameOver) {
       idxTimer += 1
       if (idxTimer % 60 == 0) {
         secondTimer += 1
       }
     }
-    g.setColor(Color.VIOLET)
-    g.drawString(100f, 150f, s"Round : ${roundCounter + 1}          Time : ${secondTimer}")
-    g.setColor(Color.BLACK)
+    font.setColor(Color.VIOLET)
+    font.draw(batch, s"Round : ${roundCounter + 1}          Time : ${secondTimer}", 20f, 50f)
+    font.setColor(Color.BLACK)
     g.setBackgroundColor(Color.WHITE)
 
     // Set the scores
-    g.drawString(100f, 100f, s" Total Scores : ${scoresCounter}")
-
+    font.draw(batch, s" Total Scores : ${scoresCounter}", 20f, 90f)
 
     // Filling the array with words for the actual round
     if (roundCounter < w.length) {
@@ -106,22 +112,22 @@ class Mixed extends PortableApplication(1920, 1080) {
       fallingWords(i).y -= 1 // -60 pixels/s
 
       if (arrSortedLength(i) != fallingWords(i).word.length) {
-        g.setColor(new Color(212, 0, 103, 255))
+        font.setColor(new Color(212 / 255f, 0, 103 / 255f, 1))
       } else {
-        g.setColor(Color.BLACK)
+        font.setColor(Color.BLACK)
       }
 
       // Drawing words on the screen
-      g.drawString(fallingWords(i).x, fallingWords(i).y, fallingWords(i).word)
+      font.draw(batch, fallingWords(i).word, fallingWords(i).x, fallingWords(i).y)
 
-      g.setColor(Color.BLACK)
+      font.setColor(Color.BLACK)
 
       if (fallingWords(i).y < 0) {
-        g.drawString(g.getScreenWidth / 2, g.getScreenHeight / 2, "G  A  M  E  O  V  E  R")
+        font.draw(batch, "G  A  M  E  O  V  E  R", g.getScreenWidth / 2f, g.getScreenHeight / 2f)
         isGameOver = true
       }
     }
-
+    batch.end()
     g.drawSchoolLogo()
   }
 
@@ -153,4 +159,5 @@ class Mixed extends PortableApplication(1920, 1080) {
     }
   }
 }
+
 
