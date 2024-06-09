@@ -74,7 +74,7 @@ class Mixed extends PortableApplication(1920, 1080) {
   // Function used to display words in a random way
   private def getRandomPosition(maxWidth: Float, maxHeight: Float): (Float, Float) = {
     val x = Random.between(200, maxWidth - 200)
-    val y = maxHeight + Random.between(50, 150)
+    val y = maxHeight + Random.between(50, 200)
     (x, y)
   }
 
@@ -141,10 +141,9 @@ class Mixed extends PortableApplication(1920, 1080) {
       if (fallingWords.length < arrSorted.length) {
         for (i <- arrSorted.indices) {
           val (x, y) = getRandomPosition(getWindowWidth.toFloat, getWindowHeight.toFloat)
-          val gapX = x * 0.1f + x
-          if (i == 0 || (i > 0 && (fallingWords(i - 1).x < gapX) || (fallingWords(i - 1).x > gapX))) {
-            fallingWords.append(WordPosition(arrSorted(i), gapX, y))
-          }
+          // x [200,1720[
+          // y [1130,1280[
+          fallingWords.append(WordPosition(arrSorted(i), x, y))
         }
       }
       // ArrSortedLength used to change the color of a word which is being typed
@@ -171,11 +170,11 @@ class Mixed extends PortableApplication(1920, 1080) {
       if (fallingWords(i).y < 0) {
         g.clear()
         isGameOver = true
-        g.drawStringCentered(g.getScreenHeight / 2 - 150, s"Achieved round : ${roundCounter}", font_blue)
-        g.drawStringCentered(g.getScreenHeight / 2 - 200, s"Score : ${scoresCounter.toInt}", font_blue)
+        g.drawStringCentered(g.getScreenHeight / 2 - 100, s"Achieved round : ${roundCounter}", font_blue)
+        g.drawStringCentered(g.getScreenHeight / 2 - 150, s"Score : ${scoresCounter.toInt}", font_blue)
         g.drawPicture(g.getScreenWidth / 2, g.getScreenHeight / 2, gameover)
-        g.drawStringCentered(g.getScreenHeight / 2 - 100, "PRESS y to replay", font_isc)
-        g.drawStringCentered(g.getScreenHeight / 2 - 250, "PRESS q to quit", font_black)
+        g.drawStringCentered(g.getScreenHeight / 2 - 250, "PRESS y to replay", font_isc)
+        g.drawStringCentered(g.getScreenHeight / 2 - 300, "PRESS q to quit", font_black)
       }
     }
     g.drawSchoolLogo()
