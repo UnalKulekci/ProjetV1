@@ -34,3 +34,6 @@ To play the Fast and Precise GAME,
 7. Enjoy and make the best score possible!
 
 ![isc](image/logo_isc.png)
+
+## Sources
+Background used in the game can be found here : https://4kwallpapers.com/abstract/outrun-neon-dark-background-purple-4523.html
