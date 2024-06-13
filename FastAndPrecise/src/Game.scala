@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
 import java.awt.geom.Point2D
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
+import com.badlogic.gdx.Input
+
 
 class Game extends PortableApplication(1920, 1080) {
 
-  private var w: ArrayBuffer[ArrayBuffer[String]] = Words.createRoundArray(Words.getWords().toArray)
+  private var w: ArrayBuffer[ArrayBuffer[String]] = ArrayBuffer.empty[ArrayBuffer[String]]
   private var arrRoundWords: ArrayBuffer[String] = ArrayBuffer.empty[String]
   private val arrRoundWordsLength: ArrayBuffer[Int] = ArrayBuffer.empty[Int]
   private val arrPositions: ArrayBuffer[Point2D] = ArrayBuffer.empty[Point2D]
@@ -29,6 +31,7 @@ class Game extends PortableApplication(1920, 1080) {
   private var font_in_use: BitmapFont = _
   private var isGameOver = false // Game over state
   private var recordAdded: Boolean = false
+  private var game_started: Boolean = false
   private var chr: Char = ' '
 
   // Used to replay the game
@@ -111,10 +114,14 @@ class Game extends PortableApplication(1920, 1080) {
       // Print Round & Timer
       g.drawString(20f, 50f, s"Round : ${roundCounter + 1}          Time :", font_black, -1)
       g.drawString(330f, 50f, s"${secondTimer} s", font_isc)
-      idxTimer += 1
-      if (idxTimer % 60 == 0) {
-        secondTimer += 1
-        idxTimer = 0
+      if (game_started) {
+        idxTimer += 1
+        if (idxTimer % 60 == 0) {
+          secondTimer += 1
+          idxTimer = 0
+        }
+      } else {
+        g.drawStringCentered(g.getScreenHeight / 2, "press space to start", font_isc_50)
       }
     }
 
@@ -211,8 +218,13 @@ class Game extends PortableApplication(1920, 1080) {
   // This function deletes the letters from the word
   override def onKeyDown(keycode: Int): Unit = {
 
-    // Getting the Char after pressing a key on the keyboard
     chr = (keycode + 68).toChar
+
+    if (keycode == Input.Keys.SPACE && !game_started) {
+      game_started = true
+      initGame()
+    }
+
     if (currentWordIndex == -1) {
       // Getting the word index to work on
       currentWordIndex = returnCurrentIdx(fallingWords, chr)
