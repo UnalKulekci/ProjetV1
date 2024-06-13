@@ -186,9 +186,7 @@ class Game extends PortableApplication(1920, 1080) {
       // Game over
       if (fallingWords(i).y < 0) {
         isGameOver = true
-        g.clear()
         g.drawPicture(g.getScreenWidth / 2, g.getScreenHeight / 2, gameover)
-        g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
         g.drawStringCentered(g.getScreenHeight / 2 - 100, s"Achieved round : ${roundCounter}", font_blue)
         g.drawStringCentered(g.getScreenHeight / 2 - 150, s"Score : ${scoreCounter}", font_blue)
         g.drawStringCentered(g.getScreenHeight / 2 - 250, "PRESS y to replay", font_isc)
