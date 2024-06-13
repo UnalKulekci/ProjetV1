@@ -4,25 +4,33 @@ Fast and Precise is a game coded in Scala based on the `ZType` game which tests 
 
 This game shows who is the king of the keyboard! If you're from HES-SO Valais-Wallis, -> send me your result <-
 
-## Goal
+## GOAL
 
 This project was made for the 101.2 - Object-oriented programming course in ISC first year program.
 
-## Screenshots
+## SCREENSHOTS
 
-### Game start
+Here you have some screenshots of the game.
+
+### GAME START
+
+The game starts with 4 words, on the next round, it will be 5 words, etc.
 
 ![in_game_start](image/game_start.png)
 
-### In Game
+### IN GAME
+
+The player needs to complete a word before going to the next one.
 
 ![in_game_typing](image/game_typing.png)
 
 ### GAME OVER
 
+If the word falls to the bottom, the game will end and you will be able to see your old scores.
+
 ![game_over](image/game_over.png)
 
-## Tutorial
+## TUTORIAL
 
 To play the Fast and Precise GAME,
 
@@ -34,12 +42,15 @@ To play the Fast and Precise GAME,
     1. Type the different letters to fill a word.
     2. For every word you have `18 seconds` before it falls down and stops the game.
     3. To go to the next round, you have to write every word shown on the screen.
-    4. Every next round contains one more word to type on. 
+    4. Every next round contains one more word to type on.
     5. To replay the game, type `y`.
     6. To leave the game, type `q`.
-    7. Enjoy and make the best score possible!
+    7. Scores are saved in a .txt file, so you can see your best one!
+    8. Enjoy and make the best score possible!
 
 ![isc](image/logo_isc.png)
 
-## Sources
-Background used in the game can be found here : https://4kwallpapers.com/abstract/outrun-neon-dark-background-purple-4523.html
+## SOURCES
+
+Background used in the game can be found
+here : https://4kwallpapers.com/abstract/outrun-neon-dark-background-purple-4523.html
