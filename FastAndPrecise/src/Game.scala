@@ -85,9 +85,11 @@ class Game extends PortableApplication(1920, 1080) {
   override def onInit(): Unit = {
     println(Console.MAGENTA + "FAST & PRECISE" + Console.RESET + " 2024 " + Console.RESET + "by " + Console.BLUE + "ÜNAL" + Console.RESET + " and" + Console.YELLOW + " FILIP" + Console.RESET)
     setTitle("FAST & PRECISE")
+    // Set imags path
     wallpaper = new BitmapImage("data/wallpaper.png")
     gameover = new BitmapImage("data/gameover.png")
     isc_logo = new BitmapImage("data/logo_isc.png")
+    // Creating fonts
     font_top1 = SpecialFont.create("000000", "d41367", 40)
     font_isc = SpecialFont.create("d41367", "ffffff", 30)
     font_isc_50 = SpecialFont.create("d41367", "ffffff", 50)
@@ -101,6 +103,7 @@ class Game extends PortableApplication(1920, 1080) {
   override def onGraphicRender(g: GdxGraphics): Unit = {
     g.clear()
     g.drawPicture(getWindowWidth / 2, getWindowHeight / 2, wallpaper)
+    g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
     if (!isGameOver) {
       idxTimer += 1
       if (idxTimer % 60 == 0) {
@@ -110,14 +113,15 @@ class Game extends PortableApplication(1920, 1080) {
     }
 
     // Print the score
-    g.drawString(20f, 70f, s" Total Scores :", font_black)
+    g.drawString(20f, 70f, s" Total Scores :", font_black, -1)
     g.drawString(230f, 70f, s" ${scoreCounter}", font_isc)
     // Print Round & Timer
-    g.drawString(20f, 50f, s"Round : ${roundCounter + 1}          Time :", font_black)
+    g.drawString(20f, 50f, s"Round : ${roundCounter + 1}          Time :", font_black, -1)
     g.drawString(330f, 50f, s"${secondTimer} s", font_isc)
 
     // Filling the array with words for the actual round
     if (roundCounter < w.length) {
+      // Adding the words for one round
       arrRoundWords = w(roundCounter)
       // Filling fallingWords array used to make the words fall on the window
       if (fallingWords.length < arrRoundWords.length) {
@@ -150,6 +154,7 @@ class Game extends PortableApplication(1920, 1080) {
           }
           arrPositions.append(new Point2D.Float(x, y))
         }
+        // Appending the x,y for each word before drawing it on the screen
         for (i <- arrRoundWords.indices) {
           fallingWords.append(WordPosition(arrRoundWords(i), arrPositions(i).getX.toFloat, arrPositions(i).getY.toFloat))
         }
@@ -166,24 +171,26 @@ class Game extends PortableApplication(1920, 1080) {
     for (i: Int <- fallingWords.indices) {
       fallingWords(i).y -= 1 // -60 pixels/s
 
+      // Changing the color of the falling word when it's been typed on
       if (arrRoundWordsLength(i) != fallingWords(i).word.length) {
         font_in_use = font_isc
       } else {
         font_in_use = font_blue
       }
-      // Drawing words on the screen
+      // Drawing falling words on the screen
       if (!isGameOver) {
         g.drawString(fallingWords(i).x, fallingWords(i).y, fallingWords(i).word, font_in_use, 0)
       }
-
       font_in_use = font_blue
 
+      // Game over
       if (fallingWords(i).y < 0) {
         isGameOver = true
         g.clear()
+        g.drawPicture(g.getScreenWidth / 2, g.getScreenHeight / 2, gameover)
+        g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
         g.drawStringCentered(g.getScreenHeight / 2 - 100, s"Achieved round : ${roundCounter}", font_blue)
         g.drawStringCentered(g.getScreenHeight / 2 - 150, s"Score : ${scoreCounter}", font_blue)
-        g.drawPicture(g.getScreenWidth / 2, g.getScreenHeight / 2, gameover)
         g.drawStringCentered(g.getScreenHeight / 2 - 250, "PRESS y to replay", font_isc)
         g.drawStringCentered(g.getScreenHeight / 2 - 300, "PRESS q to quit", font_black)
         g.drawString(240, getWindowHeight * 0.375f, "top 10", font_isc_50, 0)
@@ -196,11 +203,11 @@ class Game extends PortableApplication(1920, 1080) {
         }
       }
     }
+    // Add new score bigger than 0 only once
     if (isGameOver && !recordAdded && scoreCounter > 0) {
       Record.addNew("data/records.txt", scoreCounter)
       recordAdded = true
     }
-    g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
   }
 
   // This function deletes the letters from the word
@@ -208,18 +215,6 @@ class Game extends PortableApplication(1920, 1080) {
 
     // Getting the Char after pressing a key on the keyboard
     chr = (keycode + 68).toChar
-    if (isGameOver) {
-      if (chr == 'y') {
-        initGame()
-      } else if (chr == 'q') {
-        println("Thank you for playing")
-        println(s"Achieved round : ${Console.MAGENTA + roundCounter + Console.RESET}")
-        println(s"Score : ${Console.MAGENTA + scoreCounter + Console.RESET} in ${Console.YELLOW + secondTimer + Console.RESET} seconds")
-        System.exit(1337)
-      } else {
-        return
-      }
-    }
     if (currentWordIndex == -1) {
       // Getting the word index to work on
       currentWordIndex = returnCurrentIdx(fallingWords, chr)
@@ -238,6 +233,18 @@ class Game extends PortableApplication(1920, 1080) {
           roundCounter += 1
           arrPositions.clear()
         }
+      }
+    }
+    if (isGameOver) {
+      if (chr == 'y') {
+        initGame()
+      } else if (chr == 'q') {
+        println("Thank you for playing")
+        println(s"Achieved round : ${Console.MAGENTA + roundCounter + Console.RESET}")
+        println(s"Score : ${Console.MAGENTA + scoreCounter + Console.RESET} in ${Console.YELLOW + secondTimer + Console.RESET} seconds")
+        System.exit(1337)
+      } else {
+        return
       }
     }
   }
