@@ -87,5 +87,4 @@ object Words {
   def getWords(): ArrayBuffer[String] = {
     getFromFile("data/french_common.csv")
   }
-
 }
