@@ -2,7 +2,7 @@
 
 Fast and Precise is a game coded in Scala based on the `ZType` game which tests our ability to write on a keyboard.
 
-This game shows who is the king of the keyboard! If you're from HES-SO Valais-Wallis, -> send me your result <-
+This game shows who is the king of the keyboard!
 
 ## GOAL
 
@@ -10,9 +10,11 @@ This project was made for the 101.2 - Object-oriented programming course in ISC 
 
 ## SCREENSHOTS
 
-Here you have some screenshots of the game.
+Here are some screenshots of the game.
 
 ### GAME START
+
+To start the game, press `SPACE`.
 
 The game starts with 4 words, on the next round, it will be 5 words, etc.
 
@@ -36,7 +38,11 @@ To play the Fast and Precise GAME,
 
 - Clone this repository in your IDE (IntelliJ is preferred).
 - Open the `FastAndPrecise` Folder, not the ProjectV1.
-- In `src` folder, double-click and launch the `Main.scala` file.
+- Add the `GDX2D` libraries from the `libs` folder. (*Right click* -> *Add as Library...*)
+  - *gdx2d-desktop-1.2.2.jar*
+  - *gdx2d-desktop-1.2.2-sources.jar*
+- In `src` folder, launch the `Main.scala` file.
+
 
 - In the game:
     1. Type the different letters to fill a word.
@@ -52,5 +58,8 @@ To play the Fast and Precise GAME,
 
 ## SOURCES
 
-Background used in the game can be found
-here : https://4kwallpapers.com/abstract/outrun-neon-dark-background-purple-4523.html
+- Background used in the game
+  - https://4kwallpapers.com/abstract/outrun-neon-dark-background-purple-4523.html
+
+- GDX2D Library
+  - https://isc-hei.github.io/gdx2d/doc/install/

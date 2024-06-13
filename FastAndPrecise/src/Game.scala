@@ -7,7 +7,6 @@ import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 import com.badlogic.gdx.Input
 
-
 class Game extends PortableApplication(1920, 1080) {
 
   private var w: ArrayBuffer[ArrayBuffer[String]] = ArrayBuffer.empty[ArrayBuffer[String]]
@@ -52,7 +51,6 @@ class Game extends PortableApplication(1920, 1080) {
 
   // Word select after pressing a key depending on the y position as well as the order of letters
   private def returnCurrentIdx(a: ArrayBuffer[WordPosition], c: Char): Int = {
-    var res: Int = 0
     var min: Int = 0
     var x: ArrayBuffer[WordPosition] = ArrayBuffer.empty[WordPosition]
     for (i <- a.indices) {
@@ -259,5 +257,4 @@ class Game extends PortableApplication(1920, 1080) {
     }
   }
 }
-
 
