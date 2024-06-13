@@ -1,7 +1,7 @@
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 
 object SpecialFont {
   // FONT
