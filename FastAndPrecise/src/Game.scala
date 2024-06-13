@@ -1,12 +1,7 @@
 import ch.hevs.gdx2d.components.bitmaps.BitmapImage
 import ch.hevs.gdx2d.desktop.PortableApplication
 import ch.hevs.gdx2d.lib.GdxGraphics
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.{Batch, BitmapFont, SpriteBatch}
-
 import java.awt.geom.Point2D
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
@@ -25,12 +20,15 @@ class Game extends PortableApplication(1920, 1080) {
   private var scoreCounter: Int = 0
   private var wallpaper: BitmapImage = _
   private var gameover: BitmapImage = _
-  private var isc_logo: BitmapImage = _
-  private var font_blue: BitmapFont = _
+  private var isc_logo: BitmapImage = _ // d41367
+  private var font_blue: BitmapFont = _ // 165baa
+  private var font_top1: BitmapFont = _
   private var font_isc: BitmapFont = _
-  private var font_black: BitmapFont = _
+  private var font_isc_50: BitmapFont = _
+  private var font_black: BitmapFont = _ // Color.BLACK
   private var font_in_use: BitmapFont = _
   private var isGameOver = false // Game over state
+  private var recordAdded: Boolean = false
   private var chr: Char = ' '
 
   // Used to replay the game
@@ -46,6 +44,7 @@ class Game extends PortableApplication(1920, 1080) {
     scoreCounter = 0
     idxTimer = 0
     secondTimer = 0
+    recordAdded = false
   }
 
   // Word select after pressing a key depending on the y position as well as the order of letters
@@ -89,36 +88,13 @@ class Game extends PortableApplication(1920, 1080) {
     wallpaper = new BitmapImage("data/wallpaper.png")
     gameover = new BitmapImage("data/gameover.png")
     isc_logo = new BitmapImage("data/logo_isc.png")
-
-    // FONT
-    val starjedi = Gdx.files.internal("data/font/Starjedi.ttf")
-    val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
-    val generator = new FreeTypeFontGenerator(starjedi)
-
-    // BLUE FONT
-    parameter.size = generator.scaleForPixelHeight(30)
-    parameter.color = Color.WHITE
-    parameter.borderColor = Color.valueOf("165baa")
-    parameter.borderWidth = 3
-    font_blue = generator.generateFont(parameter)
-
-    // PINK FONT
-    parameter.size = generator.scaleForPixelHeight(30)
-    parameter.color = Color.valueOf("d41367")
-    parameter.borderColor = Color.WHITE
-
-    parameter.borderWidth = 3
-    font_isc = generator.generateFont(parameter)
-
-    // BLACK FONT
-    parameter.size = generator.scaleForPixelHeight(30)
-    parameter.color = Color.BLACK
-    parameter.borderColor = Color.WHITE
-    parameter.borderWidth = 3
-    font_black = generator.generateFont(parameter)
-    generator.dispose()
-
+    font_top1 = SpecialFont.create("000000", "d41367", 40)
+    font_isc = SpecialFont.create("d41367", "ffffff", 30)
+    font_isc_50 = SpecialFont.create("d41367", "ffffff", 50)
+    font_blue = SpecialFont.create("165baa", "ffffff", 30)
+    font_black = SpecialFont.create("000000", "ffffff", 30)
     font_in_use = font_blue
+    SpecialFont.generate()
   }
 
   // Graphic function, counter
@@ -129,6 +105,7 @@ class Game extends PortableApplication(1920, 1080) {
       idxTimer += 1
       if (idxTimer % 60 == 0) {
         secondTimer += 1
+        idxTimer = 0
       }
     }
 
@@ -195,8 +172,10 @@ class Game extends PortableApplication(1920, 1080) {
         font_in_use = font_blue
       }
       // Drawing words on the screen
-      // 17.2f pixel per letter in STARJEDI FONT
-      g.drawString(fallingWords(i).x, fallingWords(i).y, fallingWords(i).word, font_in_use)
+      if (!isGameOver) {
+        g.drawString(fallingWords(i).x, fallingWords(i).y, fallingWords(i).word, font_in_use, 0)
+      }
+
       font_in_use = font_blue
 
       if (fallingWords(i).y < 0) {
@@ -207,9 +186,21 @@ class Game extends PortableApplication(1920, 1080) {
         g.drawPicture(g.getScreenWidth / 2, g.getScreenHeight / 2, gameover)
         g.drawStringCentered(g.getScreenHeight / 2 - 250, "PRESS y to replay", font_isc)
         g.drawStringCentered(g.getScreenHeight / 2 - 300, "PRESS q to quit", font_black)
+        g.drawString(240, getWindowHeight * 0.375f, "top 10", font_isc_50, 0)
+        for (i <- Record.getFirst10("data/records.txt").indices) {
+          if (i == 0) {
+            g.drawString(90, getWindowHeight * 0.35f - 30, f"${i + 1}%02d.   " + Record.getFirst10("data/records.txt")(i), font_top1)
+          } else {
+            g.drawString(100, getWindowHeight * 0.35f - 50 - 20 * (i), f"${i + 1}%02d.   " + Record.getFirst10("data/records.txt")(i), font_blue)
+          }
+        }
       }
     }
-    g.drawTransformedPicture(g.getScreenWidth - 200, 50f, 0, 200f, 50.92f, isc_logo)
+    if (isGameOver && !recordAdded && scoreCounter > 0) {
+      Record.addNew("data/records.txt", scoreCounter)
+      recordAdded = true
+    }
+    g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
   }
 
   // This function deletes the letters from the word
