@@ -1,7 +1,6 @@
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.Random
-import scala.util.control.NonFatal
 
 object Words {
 
