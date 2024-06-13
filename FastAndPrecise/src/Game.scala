@@ -105,6 +105,12 @@ class Game extends PortableApplication(1920, 1080) {
     g.drawPicture(getWindowWidth / 2, getWindowHeight / 2, wallpaper)
     g.drawTransformedPicture(g.getScreenWidth - 200, 60f, 0, 200f, 50.92f, isc_logo)
     if (!isGameOver) {
+      // Print the score
+      g.drawString(20f, 70f, s" Total Scores :", font_black, -1)
+      g.drawString(230f, 70f, s" ${scoreCounter}", font_isc)
+      // Print Round & Timer
+      g.drawString(20f, 50f, s"Round : ${roundCounter + 1}          Time :", font_black, -1)
+      g.drawString(330f, 50f, s"${secondTimer} s", font_isc)
       idxTimer += 1
       if (idxTimer % 60 == 0) {
         secondTimer += 1
@@ -112,12 +118,6 @@ class Game extends PortableApplication(1920, 1080) {
       }
     }
 
-    // Print the score
-    g.drawString(20f, 70f, s" Total Scores :", font_black, -1)
-    g.drawString(230f, 70f, s" ${scoreCounter}", font_isc)
-    // Print Round & Timer
-    g.drawString(20f, 50f, s"Round : ${roundCounter + 1}          Time :", font_black, -1)
-    g.drawString(330f, 50f, s"${secondTimer} s", font_isc)
 
     // Filling the array with words for the actual round
     if (roundCounter < w.length) {
